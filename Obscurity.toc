@@ -1,7 +1,7 @@
 ## Interface: 90205
-## Version: 0.0.2
+## Version: 0.0.3
 ## Title: Obscurity
-## Notes: Raid Assistant
+## Notes: Accessibility Friendly Raid Assistant
 ## Author: ObscurelyMe
 ## OptionalDeps: Ace3
 
@@ -14,6 +14,8 @@ Libs\AceConsole-3.0\AceConsole-3.0.xml
 Libs\AceGUI-3.0\AceGUI-3.0.xml
 Libs\AceConfig-3.0\AceConfig-3.0.xml
 Libs\AceTimer-3.0\AceTimer-3.0.xml
+Libs\AceComm-3.0\AceComm-3.0.xml
+Libs\AceSerializer-3.0\AceSerializer-3.0.xml
 
 Core.lua
 Extras.lua
