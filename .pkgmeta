@@ -1,4 +1,4 @@
-package-as: Obscurity Raid Callouts
+package-as: Obscurity
 
 ignore:
     - .git
