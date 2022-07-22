@@ -89,7 +89,7 @@ function Obscurity:ParseCommand(command, arg1, arg2, arg3, sender)
   -- UnitIsRaidOfficer
   -- GetRaidRosterInfo and then use that to UnitGUID("unit")
   if Obscurity[command] ~= nil then
-    self[command](command, arg1, arg2, arg3)
+    self[command](nil, arg1, arg2, arg3)
   end
 end
 
