@@ -38,18 +38,18 @@ function Obscurity:SlashCommandProc(msg)
     self:SendComm("OBSCURITY_SOAK")
 	else
     if (self:IsEnabled()) then
-      self:Print("Obscurity v0.0.1 is currently: ENABLED")
+      self:Print("Obscurity v0.0.4 is currently: ENABLED")
     else
-      self:Print("Obscurity v0.0.1 is currently: DISABLED")
+      self:Print("Obscurity v0.0.4 is currently: DISABLED")
     end
 	end
 end
 
 function Obscurity:SendComm(command, arg1, arg2, arg3)
-  print("SendComm Params", command, arg1, arg2, arg3)
   local serializedPayload = self:SerializeCommand(command, arg1, arg2, arg3)
   if IsInRaid() == true then
     self:SendCommMessage(COMM_PREFIX, serializedPayload, "RAID", nil, "NORMAL")
+    return
   end
 
   if UnitInParty("player") then
