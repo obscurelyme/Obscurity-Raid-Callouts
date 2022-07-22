@@ -1,5 +1,5 @@
 ## Interface: 90205
-## Version: 0.0.1
+## Version: 0.0.2
 ## Title: Obscurity
 ## Notes: Raid Assistant
 ## Author: ObscurelyMe
