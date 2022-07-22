@@ -44,6 +44,8 @@ function Obscurity:SlashCommandProc(msg)
     WeakAuras.ScanEvents("OBSCURITY_SOAK")
   elseif msg == "gs" then
     WeakAuras.ScanEvents("OBSCURITY_GUARDIAN_SPIRIT", target)
+  elseif msg == "ping" then
+    self:SendCommMessage("ObscurityPingTest", "Hello, World!", )
 	else
     if (self:IsEnabled()) then
       self:Print("Obscurity v0.0.1 is currently: ENABLED")

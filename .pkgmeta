@@ -1,0 +1,7 @@
+package-as: Obscurity Raid Callouts
+
+ignore:
+    - .git
+    - .gitignore
+
+license-output: LICENSE.txt
