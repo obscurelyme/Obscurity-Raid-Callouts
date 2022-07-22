@@ -1,3 +1,3 @@
-# hello-ace-addon
+# Obscurity Raid Callouts
 
-Just a simple "Hello, World!" addon for World of Warcraft using the Ace3 framework.
+This is a simple backend addon for raid leads and raid assitants to perform real time speech to text/visual cues during raid and dungeon boss encounters.
