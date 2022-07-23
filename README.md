@@ -2,6 +2,8 @@
 
 This is a simple backend addon for raid leads and raid assitants to perform real time speech to text/visual cues during raid and dungeon boss encounters.
 
+Works in conjunction with the [Obscurity Raid Callouts](https://wago.io/o4AgO_5rF) WeakAura package, which serves as the frontend to this addon.
+
 This addon relies on various macros to send comms over the wire to listeners in order to send/receive instructions about what to do during the raid.
 
 Standard format for `SendComm` looks like this...
