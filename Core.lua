@@ -24,18 +24,17 @@ function Obscurity:SlashCommandProc(msg)
   elseif msg == "enable" then
     self:Enable()
   elseif msg == "end" then
-    self:OnEncounterEnd(nil, "123", "Test Encounter")
     WeakAuras.ScanEvents("OBS_ENCOUNTER_END")
   elseif msg == "wipe" then
     self:SendComm("OBSCURITY_WIPE")
-  elseif msg == "dh" then
-    self:SendComm("OBSCURITY_COOLDOWN", "OBSCURITY_DIVINE_HYMN")
   elseif msg == "bait" then
     self:SendComm("OBSCURITY_BAIT")
   elseif msg == "stack" then
     self:SendComm("OBSCURITY_STACK")
   elseif msg == "soak" then
     self:SendComm("OBSCURITY_SOAK")
+  elseif msg == "spread" then
+    self:SendComm("OBSCURITY_SPREAD")
 	else
     if (self:IsEnabled()) then
       self:Print("Obscurity v0.0.4 is currently: ENABLED")
@@ -89,7 +88,7 @@ function Obscurity:ParseCommand(command, arg1, arg2, arg3, sender)
   -- UnitIsRaidOfficer
   -- GetRaidRosterInfo and then use that to UnitGUID("unit")
   if Obscurity[command] ~= nil then
-    self[command](nil, arg1, arg2, arg3)
+    self[command](self, arg1, arg2, arg3)
   end
 end
 
