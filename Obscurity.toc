@@ -1,9 +1,11 @@
 ## Interface: 90205
-## Version: 0.0.5
+## Version: @project-version@
 ## Title: Obscurity
 ## Notes: Accessibility Friendly Raid Assistant
 ## Author: ObscurelyMe
 ## OptionalDeps: Ace3
+## X-Curse-Project-ID: 648869
+## X-Wago-ID: anKWpLGE
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml

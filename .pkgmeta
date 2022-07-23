@@ -3,5 +3,6 @@ package-as: Obscurity
 ignore:
     - .git
     - .gitignore
+    - .github
 
 license-output: LICENSE.txt
