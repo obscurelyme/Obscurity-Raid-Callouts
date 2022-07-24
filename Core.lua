@@ -1,10 +1,137 @@
 Obscurity = LibStub("AceAddon-3.0"):NewAddon("Obscurity", "AceConsole-3.0", "AceEvent-3.0", "AceComm-3.0", "AceSerializer-3.0")
+
+local AC = LibStub("AceConfig-3.0")
+local ACD = LibStub("AceConfigDialog-3.0")
 local COMM_PREFIX = "OBS_COMM"
+local options = {
+  name = "Obscurity",
+  handler = Obscurity,
+  type = "group",
+  childGroups = "tab",
+  args = {
+    enableAlerts = {
+      type = "toggle",
+      name = "Enable",
+      desc = "Enable/Disables this addon.",
+      get = "IsEnabled",
+      set = "ToggleAlerts"
+    },
+    mainOptions = {
+      name = "Main Options",
+      type = "group",
+      args = {
+        moderatorMode = {
+          type = "toggle",
+          name = "Moderator Mode",
+          desc = "Overrides config that prevents you from listening to your own messages.",
+          get = "IsModModeEnabled",
+          set = "ToggleModMode"
+        },
+        wildcardTestInput = {
+          type = "input",
+          name = "Wildcard Message",
+          desc = "Test the message to be displayed when you send a wildcard message",
+          get = "GetTestWildcardMessage",
+          set = "SetTestWildcardMessage"
+        },
+        wildcardTestBtn = {
+          type = "execute",
+          name = "Test Wildcard",
+          func = "TestWildCardMessageWA",
+        },
+      }
+    },
+    profileTab = {
+      name = "Profiles",
+      type = "group",
+      args = {
+        desc = {
+          type = "description",
+          name = "This feature is currently in development, and does not function.",
+          fontSize = "medium"
+        },
+        heading = {
+          type = "header",
+          name = "Select a profile to use"
+        },
+        pro = {
+          type = "select",
+          name = "Profile",
+          values = {
+            "Default",
+            "Profile #1",
+            "Profile #2"
+          },
+          desc = "Select the profile to use.",
+          get = "GetCurrentProfile",
+          set = "SetCurrentProfile",
+          style = "dropdown"
+        },
+      }
+    }
+  }
+}
+
+function Obscurity:IsModModeEnabled()
+  return self.modModeEnabled
+end
+
+function Obscurity:ToggleModMode()
+  if self.modModeEnabled == true then
+    self.modModeEnabled = false
+  else
+    self.modModeEnabled = true
+  end
+end
+
+function Obscurity:GetTestWildcardMessage()
+  return self.testWildCardMessage
+end
+
+function Obscurity:SetTestWildcardMessage(info, value)
+  self.testWildCardMessage = value
+end
+
+function Obscurity:TestWildCardMessageWA()
+  WeakAuras.ScanEvents("OBSCURITY_WILDCARD", self:GetTestWildcardMessage())
+end
+
+function Obscurity:ToggleAlerts()
+  if self:IsEnabled() then
+    self:Disable()
+  else
+    self:Enable()
+  end
+end
+
+function Obscurity:GetCurrentProfile()
+  return self.currentProfile
+end
+
+function Obscurity:SetCurrentProfile(info, value)
+  self.currentProfile = value
+end
+
+function Obscurity:GetMessage()
+  return self.message
+end
+
+function Obscurity:SetMessage(info, value)
+  self.message = value
+end
 
 function Obscurity:OnInitialize()
   -- Called when the addon is loaded
+  AC:RegisterOptionsTable("Obscurity_options", options)
+  self.optionsFrame = ACD:AddToBlizOptions("Obscurity_options", "Obscurity")
   self:RegisterChatCommand("obs", "SlashCommandProc")
   self:RegisterChatCommand("obscurity", "SlashCommandProc")
+
+  if self.currentProfile == nil then
+    self.currentProfile = "Default"
+  end
+
+  self.modModeEnabled = false
 end
 
 function Obscurity:OnEnable()
@@ -35,13 +162,11 @@ function Obscurity:SlashCommandProc(msg)
     self:SendComm("OBSCURITY_SOAK")
   elseif msg == "spread" then
     self:SendComm("OBSCURITY_SPREAD")
-	else
-    if (self:IsEnabled()) then
-      self:Print("Obscurity v0.0.4 is currently: ENABLED")
-    else
-      self:Print("Obscurity v0.0.4 is currently: DISABLED")
-    end
-	end
+  else
+    -- https://github.com/Stanzilla/WoWUIBugs/issues/89
+    InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+    InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+  end
 end
 
 function Obscurity:SendComm(command, arg1, arg2, arg3)
@@ -54,6 +179,8 @@ function Obscurity:SendComm(command, arg1, arg2, arg3)
   if UnitInParty("player") then
     self:SendCommMessage(COMM_PREFIX, serializedPayload, "PARTY", nil, "NORMAL")
   end
+
+  -- self:SendCommMessage(COMM_PREFIX, serializedPayload, "WHISPER", UnitName("player"), "NORMAL")
 end
 
 function Obscurity:SerializeCommand(command, arg1, arg2, arg3)
@@ -74,6 +201,12 @@ function Obscurity:OnEncounterEnd(eventName, encounterID, encounterName, difficu
 end
 
 function Obscurity:OnCommReceived(prefix, payload, distro, sender)
+  if self.modModeEnabled == false then
+    if sender == UnitName("player") then
+      return
+    end
+  end
+
   local success, deserialized = self:Deserialize(payload)
   if success == true then
     -- We have information about the command to run, we need to parse it and then tell WeakAuras about it.
@@ -116,4 +249,11 @@ function Obscurity:OBSCURITY_COOLDOWN(arg1, arg2, arg3)
   if arg1 ~= nil then
     WeakAuras.ScanEvents(arg1, arg2, arg3)
   end
+end
+
+--[[
+  Wildcard command that will allow any sort of text to be displayed to the receiver
+]]
+function Obscurity:WILDCARD(arg1, arg2, arg3)
+  WeakAuras.ScanEvents("OBSCURITY_WILDCARD", arg1, arg2, arg3)
 end
